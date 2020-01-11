@@ -41,7 +41,7 @@ architecture Behavioral of Bin2BCD1 is
 
 begin
 
-ADC_to_BCD: process (ADCBin)
+ADC_to_BCD_NS: process (ADCBin)
 begin
 
     case ADCBin is
@@ -52,8 +52,8 @@ begin
         when "0100" => Diz <= "0000";   Unites <= "0100";
         when "0101" => Diz <= "0000";   Unites <= "0101";
         when "0110" => Diz <= "0000";   Unites <= "0110";
-        when "0111" => Diz <= "0000";   Unites <= "0000";
-        when "1000" => Diz <= "0000";   Unites <= "0111";
+        when "0111" => Diz <= "0000";   Unites <= "0111";
+        when "1000" => Diz <= "0000";   Unites <= "1000";
         when "1001" => Diz <= "0000";   Unites <= "1001";
         when "1010" => Diz <= "0001";   Unites <= "0000";
         when "1011" => Diz <= "0001";   Unites <= "0001";
