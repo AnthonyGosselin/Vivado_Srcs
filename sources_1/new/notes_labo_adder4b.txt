@@ -1,0 +1,17 @@
+Reproduction d'un extrait du guide étudiant:
+
+1-	Utiliser le projet de la problématique auquel vous ajouterez 2 nouveaux modules
+    appelés Add1bitA et Add1bitB
+    dont les entrées sont A, B et Cin, la sortie Sum et Cout
+    et 2 modules appelés Add4bitsA et Add4bitB
+    dont les entrées sont A(3 :0), B(3 :0) et Cin et la sortie Sum(3 :0) ;
+2-	Réaliser la version de l'additionneur 1 bit ci-dessus dans les modules ;
+   a.  Add1bitA : utiliser une architecture comportementale basée sur une
+       table de vérité avec une fonction VHDL CASE ;
+   b.  Add1bitB : utiliser une architecture comportementale basée sur des
+       équations booléennes dans le genre " y <= A AND B ".
+3-	Valider votre solution en effectuant une simulation fonctionnelle du module additionneur 1 bit;
+
+4-	Add4bitA : Utilisez 2 modules Add1bitA et 2 modules Add1bitB pour réaliser un additionneur 4 bits par une approche hiérarchique modulaire avec propagation de la retenue.
+
+5-	Valider votre solution de l'Add4bitA en effectuant une simulation fonctionnelle du module additionneur 4 bits;
