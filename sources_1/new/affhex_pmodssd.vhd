@@ -111,6 +111,7 @@ segment:  process (donn, segm)
             when "1110" => segm  <= "1111001"; -- E
             when "1111" => segm  <= "1110001"; -- F 
             when others => segm  <= "0000000";
+            -- Il faut ajouter le code d'erreur et le signe négatif ... il manque de code??
        end case;
     end process;
 
