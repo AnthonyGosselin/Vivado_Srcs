@@ -34,7 +34,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Mux_and_Btn is
     Port ( 
            -- Input
-           Hex : in STD_LOGIC; -- Est-ce qu'il faut calculer la valeur du Hex ici ou s'est vraiment un input comme ça semble le dire dans le guide (mais pas dans le schema)?
+           ADCbin : in STD_LOGIC_VECTOR (3 downto 0);
            
            Dizaine : in STD_LOGIC_VECTOR (3 downto 0);
            Unite_ns : in STD_LOGIC_VECTOR (3 downto 0);
@@ -67,7 +67,8 @@ begin
             AFF1 <= Dizaine;
         elsif BTN(0) = '1' and BTN(1) = '0' then
             -- Hexadecimal
-            -- ?? on calcul ici ou ailleurs?
+            AFF0 <= ADCbin; -- Will be converted in pmodSSD
+            AFF1 <= "XXXX"; -- Left display empty
         elsif BTN(0) = '0' and BTN(1) = '1' then
             -- BCD -5
             AFF0 <= Unite_s;
@@ -88,7 +89,8 @@ begin
         
         if got_err = '1' then
             -- Send error code
-            
+            AFF1 <= "1110"; -- E
+            AFF0 <= "1111"; -- r
         end if;
         
     end process;
