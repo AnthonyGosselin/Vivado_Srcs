@@ -40,28 +40,24 @@ architecture Behavioral of File_TestBench is
 --> Si vous voulez comparer 2 modules VHDL, vous pouvez déclarer 2 COMPONENTS 
     -- distincts avec leurs PORT MAP respectif. 
 
-   COMPONENT Top
-   PORT( sortie : OUT STD_LOGIC; 
-          b : IN STD_LOGIC; 
-          c : IN STD_LOGIC; 
-          a : IN STD_LOGIC);
+   COMPONENT Fonction_2_3
+   PORT(   ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
+           A2_3 : out STD_LOGIC_VECTOR (2 downto 0));
    END COMPONENT;
    
 --> Générez des signaux internes au test bench avec des noms associés et les même types que dans le port
     -- Note: les noms peuvent être identiques, dans l'exemple on a ajouté un suffixe pour
     -- identifier clairement le signal qui appartient au test bench
 
-   SIGNAL sortie_sim    : STD_LOGIC;
-   SIGNAL b_sim         : STD_LOGIC;
-   SIGNAL c_sim         : STD_LOGIC;
-   SIGNAL a_sim         : STD_LOGIC;
+   SIGNAL ADCBin_sim        : STD_LOGIC_VECTOR (3 downto 0);
+   SIGNAL A2_3_sim          : STD_LOGIC_VECTOR (2 downto 0);
 
 --> S'il y a plusieurs bits en entrée pour lesquels il faut définir des valeurs de test, 
     -- par exemple a, b, c dans l'exemple présent, on recommande de créer un vecteur de test,
     -- ce qui facilitera l'écriture du test et la lisibilité du code,
     -- notamment en faisant apparaître clairement une structure de table de vérité
 
-   SIGNAL vect_test : STD_LOGIC_VECTOR (2 downto 0);  -- Création d'un signal interne (3 bits)
+   SIGNAL vect_test : STD_LOGIC_VECTOR (3 downto 0);  -- Création d'un signal interne (3 bits)
    
 --> Déclarez la constante PERIOD qui est utilisée pour la simulation
 
@@ -77,31 +73,35 @@ begin
   -- UUT Unit Under Test: ce nom est habituel mais non imposé.
   -- Si on simule deux composantes, on pourrait avoir UUT1, UUT2 par exemple
   
-  UUT: Top PORT MAP(
-      sortie => sortie_sim, 
-      b => b_sim, 
-      c => c_sim, 
-      a => a_sim
+  UUT: Fonction_2_3 PORT MAP(
+      ADCBin => ADCBin_sim, 
+      A2_3 => A2_3_sim
    );
 
  --> on assigne les signaux du vecteur de test vers les signaux connectés au port map. 
-a_sim <= vect_test(2); 
-b_sim <= vect_test(1);
-c_sim <= vect_test(0);
+ADCBin_sim <= vect_test;
  
 -- *** Test Bench - User Defined Section ***
 -- l'intérêt de cette structure de test bench est que l'on recopie la table de vérité.
 
    tb : PROCESS
    BEGIN
-         wait for PERIOD; vect_test <="000";   --> Remarquez que "vect_test" contient exactement la table de vérité.  
-         wait for PERIOD; vect_test <="001";   --> Avec cette façon, on s'assure de ne pas manquer de cas
-         wait for PERIOD; vect_test <="010";
-         wait for PERIOD; vect_test <="011";
-         wait for PERIOD; vect_test <="100";
-         wait for PERIOD; vect_test <="101";
-         wait for PERIOD; vect_test <="110";
-         wait for PERIOD; vect_test <="111";
+         wait for PERIOD; vect_test <="0000";   --> Remarquez que "vect_test" contient exactement la table de vérité.  
+         wait for PERIOD; vect_test <="0001";   --> Avec cette façon, on s'assure de ne pas manquer de cas
+         wait for PERIOD; vect_test <="0010";
+         wait for PERIOD; vect_test <="0011";
+         wait for PERIOD; vect_test <="0100";
+         wait for PERIOD; vect_test <="0101";
+         wait for PERIOD; vect_test <="0110";
+         wait for PERIOD; vect_test <="0111";
+         wait for PERIOD; vect_test <="1000";   --> Remarquez que "vect_test" contient exactement la table de vérité.  
+         wait for PERIOD; vect_test <="1001";   --> Avec cette façon, on s'assure de ne pas manquer de cas
+         wait for PERIOD; vect_test <="1010";
+         wait for PERIOD; vect_test <="1011";
+         wait for PERIOD; vect_test <="1100";
+         wait for PERIOD; vect_test <="1101";
+         wait for PERIOD; vect_test <="1110";
+         wait for PERIOD; vect_test <="1111";
          
        --> Cette partie est un exemple pour simuler le thermométrique
 --         wait for PERIOD; Thermometrique <="000000000000"; --> Code normal
