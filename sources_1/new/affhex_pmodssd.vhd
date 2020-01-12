@@ -46,7 +46,8 @@ use ieee.std_logic_unsigned.all;
 entity affhexPmodSSD is
 generic (const_CLK_MHz: integer := 100);                     -- horloge en MHz, typique 100 MHz 
     Port (   clk      : in   STD_LOGIC;                      -- horloge systeme, typique 100 MHz (preciser par le constante)
-             DA       : in   STD_LOGIC_VECTOR (7 downto 0);  -- donnee a afficher sur 8 bits : chiffre hexa position 1 et 0     
+             AFF0     : in   STD_LOGIC_VECTOR (3 downto 0);  -- Afficheur 0
+             AFF1     : in   STD_LOGIC_VECTOR (3 downto 0);  -- Afficheur 1
              JPmod    : out  STD_LOGIC_VECTOR (7 downto 0)   -- sorties directement adaptees au connecteur PmodSSD
            );
 end affhexPmodSSD;
@@ -80,12 +81,12 @@ begin
 end process;
 
 -- multiplexage pour affichage
-local_SEL_proc: process(SEL, DA)
+local_SEL_proc: process(SEL, AFF0, AFF1)
 begin
      if SEL = '0' then 
-            donn <= DA(3 downto 0); 
+            donn <= AFF0(3 downto 0); 
         else
-            donn <= DA(7 downto 4);
+            donn <= AFF1(3 downto 0);
         end if;               
 end process;
 
@@ -105,11 +106,12 @@ segment:  process (donn, segm)
             when "1000" => segm  <= "1111111"; -- 8
             when "1001" => segm  <= "1101111"; -- 9 
             when "1010" => segm  <= "1110111"; -- A
-            when "1011" => segm  <= "1111100"; -- b 
-            when "1100" => segm  <= "0111001"; -- C 
-            when "1101" => segm  <= "1011110"; -- d 
+            when "1011" => segm  <= "1111100"; -- b
+            when "1100" => segm  <= "0111001"; -- C
+            
+            when "1101" => segm  <= "1000000"; -- '-'
             when "1110" => segm  <= "1111001"; -- E
-            when "1111" => segm  <= "1110001"; -- F 
+            when "1111" => segm  <= "1010000"; -- r
             when others => segm  <= "0000000";
             -- Il faut ajouter le code d'erreur et le signe négatif ... il manque de code??
        end case;
