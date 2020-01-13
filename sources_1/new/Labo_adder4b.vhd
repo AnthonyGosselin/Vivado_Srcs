@@ -33,6 +33,7 @@ entity labo_adder4b is
   port ( 
           i_btn       : in    std_logic_vector (3 downto 0); -- Boutons de la carte Zybo
           i_sw        : in    std_logic_vector (3 downto 0); -- Interrupteurs de la carte Zybo
+          i_ADC_th    : in    std_logic_vector (11 downto 0);
           sysclk      : in    std_logic;                     -- horloge systeme
           o_SSD       : out   std_logic_vector (7 downto 0); -- vers cnnecteur pmod afficheur 7 segments
           o_led       : out   std_logic_vector (3 downto 0); -- vers DELs de la carte Zybo
@@ -186,7 +187,7 @@ begin
        
     inst_Thermo2Bin: Thermo2Bin
         port map (
-            ADC     =>   s_ADC,
+            ADC     =>   i_ADC_th,
             ADCBin  =>   s_ADCBin,
             erreur    =>   s_erreur
          );
@@ -200,7 +201,7 @@ begin
     inst_Decodeur3_8: Decodeur3_8
         port map (
             A2_3  =>   s_A2_3,
-            LD    =>   s_LD
+            LD    =>   o_pmodled
          );
 
     inst_Parity: Parity
@@ -243,17 +244,9 @@ begin
             AFF0    => s_AFF0,
             AFF1    => s_AFF1
          );
-
-   d_opa               <=  i_sw;                        -- operande A sur interrupteurs
-   d_opb               <=  i_btn;                       -- operande B sur boutons
-   d_cin               <=  d_S_1Hz;                     -- la retenue d'entrée alterne 0 1 a 1 Hz
       
-   d_AFF0              <=  d_sum(3 downto 0);           -- Le resultat affiché sur PmodSSD(0)
-   d_AFF1              <=  '0' & '0' & '0' & d_Cout;    -- La retenue de sortie affichée sur PmodSSD(1) (0 ou 1)
-   o_led6_r            <=  d_Cout;                      -- La led couleur représente aussi la retenue en sortie  Cout
-   o_pmodled           <=  d_opa & d_opb;               -- Les opérandes d'entrés reproduits combinés sur Pmod8LD
-   o_led (3 downto 0)  <=  '0' & '0' & '0' & d_S_1Hz;   -- La LED0 sur la carte représente retenue d'entrée        
    
+   o_led6_r            <=  d_S_1Hz;                      -- La led couleur représente aussi la retenue en sortie  Cout
    
 end BEHAVIORAL;
 
