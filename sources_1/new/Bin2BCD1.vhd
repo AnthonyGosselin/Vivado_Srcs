@@ -58,9 +58,9 @@ begin
         when "1010" => Diz <= "0001";   Unites <= "0000";
         when "1011" => Diz <= "0001";   Unites <= "0001";
         when "1100" => Diz <= "0001";   Unites <= "0010";
-        when "1101" => Diz <= "0001";   Unites <= "0011";
-        when "1110" => Diz <= "0001";   Unites <= "0100";
-        when "1111" => Diz <= "0001";   Unites <= "0101";
+--        when "1101" => Diz <= "0001";   Unites <= "0011";
+--        when "1110" => Diz <= "0001";   Unites <= "0100";
+--        when "1111" => Diz <= "0001";   Unites <= "0101";
         when others => Diz <= "1111";   Unites <= "0000";
     end case;
 

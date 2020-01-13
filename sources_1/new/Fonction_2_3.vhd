@@ -74,12 +74,11 @@ begin
         A <= "000" & ADCBin(3 downto 0) & '0';
         B <= '0' & ADCBin(3 downto 0) & "000";
         
-        -- Add done, select if we need to add +1 in edge cases
-        
-        
     end process;
     
-    A2_3 <= SumPlus1(2 downto 0) when Sum(3) = '1'
-    else Sum(6 downto 4);
+    -- Add done, select if we need to add +1 in edge cases
+    A2_3 <= Sum(6 downto 4) when Sum(3) = '0'
+    else Sum(6 downto 4) when Sum(3) = '1' and Sum(6 downto 4) = "111"      -- In case of 12 (0111 1000), dont use +1 so it gives 111 instead of 000
+    else SumPlus1(2 downto 0);
     
 end Behavioral;

@@ -52,6 +52,8 @@ architecture Behavioral of Moins_5 is
 begin
 
     inst_Subber : Add_Sub4bits
-        port map ( A => ADCbin, B => "0101", Cin => '0', Sum => Sum, Cout => Cout);
+        port map ( A => ADCbin, B => "0101", Cin => '0', Sum => Moins5, Cout => Cout);
+
+    
 
 end Behavioral;

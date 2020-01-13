@@ -58,9 +58,9 @@ begin
         when "1010" => Moins <= "1101";   Unit5 <= "0110";
         when "1011" => Moins <= "1101";   Unit5 <= "0101";
         when "1100" => Moins <= "1101";   Unit5 <= "0100";
-        when "1101" => Moins <= "1101";   Unit5 <= "0011";
-        when "1110" => Moins <= "1101";   Unit5 <= "0010";
-        when "1111" => Moins <= "1101";   Unit5 <= "0001";
+--        when "1101" => Moins <= "1101";   Unit5 <= "0011";
+--        when "1110" => Moins <= "1101";   Unit5 <= "0010";
+--        when "1111" => Moins <= "1101";   Unit5 <= "0001";
         when others => Moins <= "1111";   Unit5 <= "0000";
     end case;
 

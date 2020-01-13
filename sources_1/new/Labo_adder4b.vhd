@@ -40,7 +40,7 @@ entity labo_adder4b is
           o_pmodled   : out   std_logic_vector (7 downto 0)  -- vers connecteur pmod 8 DELs
           );
 end labo_adder4b;
- 
+
 architecture BEHAVIORAL of labo_adder4b is
 
    constant nbreboutons     : integer := 4;    -- Carte Zybo Z7
@@ -77,6 +77,61 @@ architecture BEHAVIORAL of labo_adder4b is
               );
    end component;
    
+   
+   -- Added component modules
+   Component Fonction_2_3 is
+        Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
+               A2_3 : out STD_LOGIC_VECTOR (2 downto 0));
+    end Component;
+ 
+    Component Decodeur3_8 is
+    Port ( A2_3 : in STD_LOGIC_VECTOR (2 downto 0);
+           LD : out STD_LOGIC_VECTOR (7 downto 0));
+    end Component;
+    
+    Component Parity is
+    Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
+           i_S1: in STD_LOGIC; -- C'est les bouton S1 pour le type de parité... Pourquoi ça dit de le mettre en sortie dans l'annexe du guide?
+           Parite : out STD_LOGIC);
+    end Component;
+    
+    Component Bin2BCD1 is
+    Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
+           Diz : out STD_LOGIC_VECTOR (3 downto 0);
+           Unites : out STD_LOGIC_VECTOR (3 downto 0));
+    end Component;
+    
+    Component Moins_5 is
+    Port ( ADCbin : in STD_LOGIC_VECTOR (3 downto 0);
+           Moins5 : out STD_LOGIC_VECTOR (3 downto 0));
+    end Component;
+    
+    Component Bin2BCD2 is
+    Port ( Moins5 : in STD_LOGIC_VECTOR (3 downto 0);
+           Moins : out STD_LOGIC_VECTOR (3 downto 0);
+           Unit5 : out STD_LOGIC_VECTOR (3 downto 0));
+    end Component;
+    
+    Component Mux_and_Btn is
+    Port ( 
+           -- Input
+           ADCbin : in STD_LOGIC_VECTOR (3 downto 0);
+           
+           Dizaine : in STD_LOGIC_VECTOR (3 downto 0);
+           Unite_ns : in STD_LOGIC_VECTOR (3 downto 0);
+           Code_signe : in STD_LOGIC_VECTOR (3 downto 0);
+           Unite_s : in STD_LOGIC_VECTOR (3 downto 0);
+           
+           -- Control
+           erreur : in STD_LOGIC;
+           BTN : in STD_LOGIC_VECTOR (1 downto 0);
+           S2 : in STD_LOGIC;
+           
+           -- Output
+           AFF0 : out STD_LOGIC_VECTOR (3 downto 0);
+           AFF1 : out STD_LOGIC_VECTOR (3 downto 0));
+    end Component;
+   
 
 begin
   
@@ -97,8 +152,60 @@ begin
            DA(3 downto 0)  => d_AFF0,
            JPmod  => o_SSD   -- sorties directement adaptees au connecteur PmodSSD
        );
-                   
-                     
+   
+--    inst_Fonction_2_3: Fonction_2_3
+--        port map (
+--            ADCBin  =>   ADCBin,
+--            A2_3    =>    A2_3
+--         );
+
+--    inst_Decodeur3_8: Decodeur3_8
+--        port map (
+--            A2_3  =>   A2_3,
+--            LD    => 
+--         );
+
+--    inst_Parity: Parity
+--        port map (
+--            ADCBin  =>   ADCBin,
+--            i_S1    =>
+--            Parite  =>
+--         );
+
+--    inst_Bin2BCD1: Bin2BCD1
+--        port map (
+--            ADCBin  =>   ADCBin,
+--            Diz    => Dizaine,
+--            Unites    => Unite_ns
+--         );
+
+--    inst_Moins_5: Moins_5
+--        port map (
+--            ADCBin  =>   ADCBin,
+--            Moins5  => Moins5
+--         );
+
+--    inst_Bin2BCD2: Bin2BCD2
+--        port map (
+--            Moins5  =>   Moins5,
+--            Moins    =>   Code_signe,
+--            Unit5    => Unite_s
+--         );
+
+--    inst_Mux_and_Btn: Mux_and_Btn
+--        port map (
+--            ADCBin  =>   ADCBin,
+--            Dizaine    => Diz,
+--            Unite_ns    => Unites,
+--            Code_signe    =>  Moins,
+--            Unite_s    => Unit5,
+--            erreur    =>
+--            BTN    =>
+--            S2    =>
+--            AFF0    =>
+--            AFF1    =>
+--         );
+
    d_opa               <=  i_sw;                        -- operande A sur interrupteurs
    d_opb               <=  i_btn;                       -- operande B sur boutons
    d_cin               <=  d_S_1Hz;                     -- la retenue d'entrée alterne 0 1 a 1 Hz
