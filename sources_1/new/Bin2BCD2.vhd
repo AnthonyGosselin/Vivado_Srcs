@@ -53,7 +53,7 @@ begin
         when "0101" => Moins <= "XXXX";   Unit5 <= "0101";
         when "0110" => Moins <= "XXXX";   Unit5 <= "0110";
         when "0111" => Moins <= "XXXX";   Unit5 <= "0111";
-        when "1000" => Moins <= "1101";   Unit5 <= "0100";
+        when "1000" => Moins <= "1101";   Unit5 <= "1000";
         when "1001" => Moins <= "1101";   Unit5 <= "0111";
         when "1010" => Moins <= "1101";   Unit5 <= "0110";
         when "1011" => Moins <= "1101";   Unit5 <= "0101";

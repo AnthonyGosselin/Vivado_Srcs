@@ -38,17 +38,7 @@ end Decodeur3_8;
 
 architecture Behavioral of Decodeur3_8 is
 
-    component Fonction_2_3 is
-    Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
-           A2_3 : out STD_LOGIC_VECTOR (2 downto 0));
-    end component;
-           
-    signal ThreeBit_Output: STD_LOGIC_VECTOR (2 downto 0);
-
 begin
-
-    inst_Fonction_2_3: Fonction_2_3
-        port map ( ADCBin => A2_3, A2_3 => ThreeBit_Output);
         
     LD <= "00000001" when A2_3 = "000"
     else "00000010" when A2_3 = "001"
@@ -58,6 +48,6 @@ begin
     else "00100000" when A2_3 = "101"
     else "01000000" when A2_3 = "110"
     else "10000000" when A2_3 = "111"
-    else "111111111"; 
+    else "11111111"; 
 
 end Behavioral;

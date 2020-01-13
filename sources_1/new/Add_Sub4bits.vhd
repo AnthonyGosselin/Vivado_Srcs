@@ -55,34 +55,22 @@ architecture Behavioral of Add_Sub4bits is
 
 begin
 
-    B_2Comp: process (B)
-    begin
-        case B(0) is
-            when '0' => tempBComp(0) <= '1';
-            when '1' => tempBComp(0) <= '0';
-        end case;
-        
-        case B(1) is
-            when '0' => tempBComp(1) <= '1';
-            when '1' => tempBComp(1) <= '0';
-        end case;
-        
-        case B(2) is
-            when '0' => tempBComp(2) <= '1';
-            when '1' => tempBComp(2) <= '0';
-        end case;
-        
-        case B(3) is
-            when '0' => tempBComp(3) <= '1';
-            when '1' => tempBComp(3) <= '0';
-        end case;
+        tempBComp(0) <= '1' when B(0) = '0'
+        else '0';
 
-    end process;
+        tempBComp(1) <= '1' when B(1) = '0'
+        else '0';
+        
+        tempBComp(2) <= '1' when B(2) = '0'
+        else '0';
+        
+        tempBComp(3) <= '1' when B(3) = '0'
+        else '0';
     
     add1: Add4bitsB
         port map ( A => tempBComp, B => "0001", Cin => '0', Sum => BComp, Cout => CoutComp);
 
     inst_Adder : Add4bitsB
-        port map ( A => A, B => B, Cin => Cin, Sum => Sum, Cout => Cout);
+        port map ( A => A, B => BComp, Cin => Cin, Sum => Sum, Cout => Cout);
 
 end Behavioral;
