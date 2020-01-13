@@ -79,15 +79,29 @@ architecture BEHAVIORAL of labo_adder4b is
    
    
    -- Added component modules
+   Component Thermo2Bin is
+       Port ( ADC : in STD_LOGIC_VECTOR(11 downto 0);
+              ADCbin : out STD_LOGIC_VECTOR (3 downto 0);
+              erreur : out STD_LOGIC);
+    end Component;
+    
+    SIGNAL s_ADC: STD_LOGIC_VECTOR (11 downto 0);
+    SIGNAL s_ADCbin: STD_LOGIC_VECTOR (3 downto 0);
+    SIGNAL s_erreur: STD_LOGIC;
+   
    Component Fonction_2_3 is
         Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
                A2_3 : out STD_LOGIC_VECTOR (2 downto 0));
     end Component;
+    
+    SIGNAL s_A2_3: STD_LOGIC_VECTOR (2 downto 0);
  
     Component Decodeur3_8 is
     Port ( A2_3 : in STD_LOGIC_VECTOR (2 downto 0);
            LD : out STD_LOGIC_VECTOR (7 downto 0));
     end Component;
+    
+    SIGNAL s_LD: STD_LOGIC_VECTOR (7 downto 0);
     
     Component Parity is
     Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
@@ -95,22 +109,33 @@ architecture BEHAVIORAL of labo_adder4b is
            Parite : out STD_LOGIC);
     end Component;
     
+    SIGNAL s_i_S1: STD_LOGIC;
+    SIGNAL s_Parite: STD_LOGIC;
+    
     Component Bin2BCD1 is
     Port ( ADCBin : in STD_LOGIC_VECTOR (3 downto 0);
            Diz : out STD_LOGIC_VECTOR (3 downto 0);
            Unites : out STD_LOGIC_VECTOR (3 downto 0));
     end Component;
     
+    SIGNAL s_Diz: STD_LOGIC_VECTOR (3 downto 0);
+    SIGNAL s_Unite_ns: STD_LOGIC_VECTOR (3 downto 0);
+    
     Component Moins_5 is
     Port ( ADCbin : in STD_LOGIC_VECTOR (3 downto 0);
            Moins5 : out STD_LOGIC_VECTOR (3 downto 0));
     end Component;
+    
+    SIGNAL s_Moins5: STD_LOGIC_VECTOR (3 downto 0);
     
     Component Bin2BCD2 is
     Port ( Moins5 : in STD_LOGIC_VECTOR (3 downto 0);
            Moins : out STD_LOGIC_VECTOR (3 downto 0);
            Unit5 : out STD_LOGIC_VECTOR (3 downto 0));
     end Component;
+    
+    SIGNAL s_Moins: STD_LOGIC_VECTOR (3 downto 0);
+    SIGNAL s_Unite_s: STD_LOGIC_VECTOR (3 downto 0);
     
     Component Mux_and_Btn is
     Port ( 
@@ -131,6 +156,11 @@ architecture BEHAVIORAL of labo_adder4b is
            AFF0 : out STD_LOGIC_VECTOR (3 downto 0);
            AFF1 : out STD_LOGIC_VECTOR (3 downto 0));
     end Component;
+    
+    SIGNAL s_BTN: STD_LOGIC_VECTOR (1 downto 0);
+    SIGNAL s_S2: STD_LOGIC;
+    SIGNAL s_AFF0: STD_LOGIC_VECTOR (3 downto 0);
+    SIGNAL s_AFF1: STD_LOGIC_VECTOR (3 downto 0);
    
 
 begin
@@ -152,59 +182,67 @@ begin
            DA(3 downto 0)  => d_AFF0,
            JPmod  => o_SSD   -- sorties directement adaptees au connecteur PmodSSD
        );
+       
+       
+    inst_Thermo2Bin: Thermo2Bin
+        port map (
+            ADC     =>   s_ADC,
+            ADCBin  =>   s_ADCBin,
+            erreur    =>   s_erreur
+         );
    
---    inst_Fonction_2_3: Fonction_2_3
---        port map (
---            ADCBin  =>   ADCBin,
---            A2_3    =>    A2_3
---         );
+    inst_Fonction_2_3: Fonction_2_3
+        port map (
+            ADCBin  =>   s_ADCBin,
+            A2_3    =>   s_A2_3
+         );
 
---    inst_Decodeur3_8: Decodeur3_8
---        port map (
---            A2_3  =>   A2_3,
---            LD    => 
---         );
+    inst_Decodeur3_8: Decodeur3_8
+        port map (
+            A2_3  =>   s_A2_3,
+            LD    =>   s_LD
+         );
 
---    inst_Parity: Parity
---        port map (
---            ADCBin  =>   ADCBin,
---            i_S1    =>
---            Parite  =>
---         );
+    inst_Parity: Parity
+        port map (
+            ADCBin  =>   s_ADCBin,
+            i_S1    =>   s_i_S1,
+            Parite  =>   s_Parite
+         );
 
---    inst_Bin2BCD1: Bin2BCD1
---        port map (
---            ADCBin  =>   ADCBin,
---            Diz    => Dizaine,
---            Unites    => Unite_ns
---         );
+    inst_Bin2BCD1: Bin2BCD1
+        port map (
+            ADCBin  =>   s_ADCBin,
+            Diz    => s_Diz,
+            Unites    => s_Unite_ns
+         );
 
---    inst_Moins_5: Moins_5
---        port map (
---            ADCBin  =>   ADCBin,
---            Moins5  => Moins5
---         );
+    inst_Moins_5: Moins_5
+        port map (
+            ADCBin  =>   s_ADCBin,
+            Moins5  => s_Moins5
+         );
 
---    inst_Bin2BCD2: Bin2BCD2
---        port map (
---            Moins5  =>   Moins5,
---            Moins    =>   Code_signe,
---            Unit5    => Unite_s
---         );
+    inst_Bin2BCD2: Bin2BCD2
+        port map (
+            Moins5  =>   s_Moins5,
+            Moins    =>  s_Moins,
+            Unit5    => s_Unite_s
+         );
 
---    inst_Mux_and_Btn: Mux_and_Btn
---        port map (
---            ADCBin  =>   ADCBin,
---            Dizaine    => Diz,
---            Unite_ns    => Unites,
---            Code_signe    =>  Moins,
---            Unite_s    => Unit5,
---            erreur    =>
---            BTN    =>
---            S2    =>
---            AFF0    =>
---            AFF1    =>
---         );
+    inst_Mux_and_Btn: Mux_and_Btn
+        port map (
+            ADCBin  =>   s_ADCBin,
+            Dizaine    => s_Diz,
+            Unite_ns    => s_Unite_ns,
+            Code_signe    =>  s_Moins,
+            Unite_s    => s_Unite_s,
+            erreur    => s_erreur,
+            BTN    => s_BTN,
+            S2    => s_S2,
+            AFF0    => s_AFF0,
+            AFF1    => s_AFF1
+         );
 
    d_opa               <=  i_sw;                        -- operande A sur interrupteurs
    d_opb               <=  i_btn;                       -- operande B sur boutons
