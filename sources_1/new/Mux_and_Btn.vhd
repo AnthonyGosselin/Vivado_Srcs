@@ -68,7 +68,7 @@ begin
         elsif BTN(0) = '1' and BTN(1) = '0' then
             -- Hexadecimal
             AFF0 <= ADCbin; -- Will be converted in pmodSSD
-            AFF1 <= "XXXX"; -- Left display empty
+            AFF1 <= "0000"; -- Left display empty
         elsif BTN(0) = '0' and BTN(1) = '1' then
             -- BCD -5
             AFF0 <= Unite_s;

@@ -35,9 +35,12 @@ entity labo_adder4b is
           i_sw        : in    std_logic_vector (3 downto 0); -- Interrupteurs de la carte Zybo
           i_ADC_th    : in    std_logic_vector (11 downto 0);
           sysclk      : in    std_logic;                     -- horloge systeme
+          i_S1        : in    std_logic;                     -- horloge systeme
+          i_S2        : in    std_logic;                     -- horloge systeme
+          o_DEL2      : out    std_logic;
           o_SSD       : out   std_logic_vector (7 downto 0); -- vers cnnecteur pmod afficheur 7 segments
           o_led       : out   std_logic_vector (3 downto 0); -- vers DELs de la carte Zybo
-          o_led6_r    : out   std_logic;                     -- vers DEL rouge de la carte Zybo
+          led6_r      : out   std_logic;                     -- vers DEL rouge de la carte Zybo
           o_pmodled   : out   std_logic_vector (7 downto 0)  -- vers connecteur pmod 8 DELs
           );
 end labo_adder4b;
@@ -73,7 +76,8 @@ architecture BEHAVIORAL of labo_adder4b is
  component affhexPmodSSD is
    generic (const_CLK_MHz: integer := freq_sys_MHz);
        Port (  clk      : in   STD_LOGIC;
-               DA       : in   STD_LOGIC_VECTOR (7 downto 0);  -- donnee digit 1 et 0     
+               AFF0     : in   STD_LOGIC_VECTOR (3 downto 0);  -- Afficheur 0
+               AFF1     : in   STD_LOGIC_VECTOR (3 downto 0);  -- Afficheur 1   
                JPmod    : out  STD_LOGIC_VECTOR (7 downto 0)
               );
    end component;
@@ -179,8 +183,8 @@ begin
        port map (
            clk    => clk_5MHz,
            -- donnee a afficher definies sur 8 bits : chiffre hexa position 1 et 0
-           DA(7 downto 4)  => d_AFF1, 
-           DA(3 downto 0)  => d_AFF0,
+           AFF0  => s_AFF1, 
+           AFF1  => s_AFF0,
            JPmod  => o_SSD   -- sorties directement adaptees au connecteur PmodSSD
        );
        
@@ -189,7 +193,7 @@ begin
         port map (
             ADC     =>   i_ADC_th,
             ADCBin  =>   s_ADCBin,
-            erreur    =>   s_erreur
+            erreur  =>   s_erreur
          );
    
     inst_Fonction_2_3: Fonction_2_3
@@ -207,7 +211,7 @@ begin
     inst_Parity: Parity
         port map (
             ADCBin  =>   s_ADCBin,
-            i_S1    =>   s_i_S1,
+            i_S1    =>   i_S1,
             Parite  =>   s_Parite
          );
 
@@ -221,32 +225,33 @@ begin
     inst_Moins_5: Moins_5
         port map (
             ADCBin  =>   s_ADCBin,
-            Moins5  => s_Moins5
+            Moins5  =>   s_Moins5
          );
 
     inst_Bin2BCD2: Bin2BCD2
         port map (
-            Moins5  =>   s_Moins5,
-            Moins    =>  s_Moins,
-            Unit5    => s_Unite_s
+            Moins5   =>   s_Moins5,
+            Moins    =>   s_Moins,
+            Unit5    =>   s_Unite_s
          );
 
     inst_Mux_and_Btn: Mux_and_Btn
         port map (
-            ADCBin  =>   s_ADCBin,
-            Dizaine    => s_Diz,
-            Unite_ns    => s_Unite_ns,
-            Code_signe    =>  s_Moins,
-            Unite_s    => s_Unite_s,
-            erreur    => s_erreur,
-            BTN    => s_BTN,
-            S2    => s_S2,
-            AFF0    => s_AFF0,
-            AFF1    => s_AFF1
+            ADCBin          =>   s_ADCBin,
+            Dizaine         => s_Diz,
+            Unite_ns        => s_Unite_ns,
+            Code_signe      =>  s_Moins,
+            Unite_s         => s_Unite_s,
+            erreur          => s_erreur,
+            BTN             => i_BTN(1 downto 0),
+            S2              => i_S2,
+            AFF0            => s_AFF1,
+            AFF1            => s_AFF0
          );
-      
    
-   o_led6_r            <=  d_S_1Hz;                      -- La led couleur représente aussi la retenue en sortie  Cout
+   o_DEL2              <= s_Parite;
+   o_led(0)            <= s_Parite;
+   led6_r              <=  d_S_1Hz;                      -- La led couleur représente aussi la retenue en sortie  Cout
    
 end BEHAVIORAL;
 

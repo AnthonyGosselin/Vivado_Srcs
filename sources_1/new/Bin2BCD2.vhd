@@ -45,22 +45,22 @@ ADC_to_BCD_S: process (Moins5)
 begin
 
     case Moins5 is
-        when "0000" => Moins <= "XXXX";   Unit5 <= "0000";
-        when "0001" => Moins <= "XXXX";   Unit5 <= "0001";
-        when "0010" => Moins <= "XXXX";   Unit5 <= "0010";
-        when "0011" => Moins <= "XXXX";   Unit5 <= "0011";
-        when "0100" => Moins <= "XXXX";   Unit5 <= "0100";
-        when "0101" => Moins <= "XXXX";   Unit5 <= "0101";
-        when "0110" => Moins <= "XXXX";   Unit5 <= "0110";
-        when "0111" => Moins <= "XXXX";   Unit5 <= "0111";
+        when "0000" => Moins <= "0000";   Unit5 <= "0000";
+        when "0001" => Moins <= "0000";   Unit5 <= "0001";
+        when "0010" => Moins <= "0000";   Unit5 <= "0010";
+        when "0011" => Moins <= "0000";   Unit5 <= "0011";
+        when "0100" => Moins <= "0000";   Unit5 <= "0100";
+        when "0101" => Moins <= "0000";   Unit5 <= "0101";
+        when "0110" => Moins <= "0000";   Unit5 <= "0110";
+        when "0111" => Moins <= "0000";   Unit5 <= "0111";
         when "1000" => Moins <= "1101";   Unit5 <= "1000";
         when "1001" => Moins <= "1101";   Unit5 <= "0111";
         when "1010" => Moins <= "1101";   Unit5 <= "0110";
         when "1011" => Moins <= "1101";   Unit5 <= "0101";
         when "1100" => Moins <= "1101";   Unit5 <= "0100";
---        when "1101" => Moins <= "1101";   Unit5 <= "0011";
---        when "1110" => Moins <= "1101";   Unit5 <= "0010";
---        when "1111" => Moins <= "1101";   Unit5 <= "0001";
+        when "1101" => Moins <= "1101";   Unit5 <= "0011";
+        when "1110" => Moins <= "1101";   Unit5 <= "0010";
+        when "1111" => Moins <= "1101";   Unit5 <= "0001";
         when others => Moins <= "1111";   Unit5 <= "0000";
     end case;
 
